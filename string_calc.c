@@ -114,7 +114,7 @@ void rep_strings() {
   pos_str[strlen(pos_str)-1] = '\0';
   int pos;
 
-  if (is_numeric(pos_str) == 0) {
+  if (strlen(pos_str) == 0 || is_numeric(pos_str) == 0) {
     printf("Invalid input. Must enter a non-negative number\n");
   }
   else {
