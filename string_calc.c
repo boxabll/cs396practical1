@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 void add_strings(){
   // read first string
@@ -83,6 +84,79 @@ void sub_strings() {
   }
 }
 
+// returns 0 if contains nonnumeric chars, 1 if it doesn't
+int is_numeric(char* str) {
+  while (*str != '\0') {
+    if (isdigit(*str) == 0) {
+      return 0;
+    }
+    str += 1;
+  }
+  return 1; // all chars are numeric
+} 
+
+void rep_strings() {
+  // variables for replacement string
+  char* rep = NULL;
+  size_t rep_len = 0;
+
+  // read source string
+  char* source = NULL;
+  size_t source_len = 0;
+  printf("Enter a string: ");
+  getline(&source, &source_len, stdin);
+  source[strlen(source)-1] = '\0';
+
+  char* pos_str = NULL;
+  size_t pos_len = 0;
+  printf("Enter the position at which to begin replacing: ");
+  getline(&pos_str, &pos_len, stdin);
+  pos_str[strlen(pos_str)-1] = '\0';
+  int pos;
+
+  if (is_numeric(pos_str) == 0) {
+    printf("Invalid input. Must enter a non-negative number\n");
+  }
+  else {
+    pos = atoi(pos_str); // numeric so convert from string to int
+
+    if (pos >= strlen(source)) {
+      printf("Invalid index. Must be within source string\n");
+    }
+    else {
+      // read second string
+      printf("Enter the string to replace with: ");
+      getline(&rep, &rep_len, stdin);
+      rep[strlen(rep)-1] = '\0';
+
+      // rep string won't go past end of source string
+      if (strlen(rep) <= strlen(source) - pos) {
+        // until run out of rep string chars
+        int read = 0; // index to read from rep
+        while (read < strlen(rep)) {
+          // copy chars over
+          source[pos] = rep[read];
+          pos += 1;
+          read += 1;
+        }
+      }
+
+      printf("Result: %s\n", source);
+    }
+  }
+
+  // free memory used
+  if (source != NULL) {
+    free(source);
+  }
+  if (rep != NULL) {
+    free(rep);
+  }
+  if (pos_str != NULL) {
+    free(pos_str);
+  }
+}
+
 
 
 int main() {
@@ -116,13 +190,10 @@ int main() {
     
   } else if (strcmp(choice, "sub") == 0) {
     sub_strings();
-    // should this remove all instances of substring? or just first?
     
   } else if (strcmp(choice, "rep") == 0) {
-    // TODO
-    // use strstr
-    // and strncpy?
-    // check that position given is valid (enough space to substitute)
+    rep_strings();
+    
   } else {
     printf(
         "Invalid choice. Make sure to enter \"add\", \"sub\", or \"rep\".\n");
