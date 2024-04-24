@@ -119,9 +119,11 @@ void rep_strings() {
   }
   else {
     pos = atoi(pos_str); // numeric so convert from string to int
+    char check_pos[12]; 
+    snprintf(check_pos, 12, "%d", pos);
 
-    if (pos >= strlen(source)) {
-      printf("Invalid index. Must be within source string\n");
+    if (pos >= strlen(source) || strcmp(check_pos, pos_str) != 0) {
+      printf("Invalid index (number is too high). Must be within source string\n");
     }
     else {
       // read second string
